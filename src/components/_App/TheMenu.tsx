@@ -1,6 +1,11 @@
 import Link from 'next/link'
 import { Menu } from 'antd'
-import { HomeOutlined, ForkOutlined } from '@ant-design/icons'
+import {
+  HomeOutlined,
+  BranchesOutlined,
+  FileDoneOutlined,
+  BarcodeOutlined,
+} from '@ant-design/icons'
 import useOpenedMenus from 'libs/hooks/useOpenedMenus'
 
 export default function TheMenu() {
@@ -12,8 +17,18 @@ export default function TheMenu() {
       label: <Link href="/dashboard/home">Home</Link>,
     },
     {
+      key: 'booking',
+      icon: <FileDoneOutlined />,
+      label: <Link href="/dashboard/booking">Booking</Link>,
+    },
+    {
+      key: 'ticket',
+      icon: <BarcodeOutlined />,
+      label: <Link href="/dashboard/ticket">Ticket</Link>,
+    },
+    {
       key: 'partner',
-      icon: <ForkOutlined />,
+      icon: <BranchesOutlined />,
       label: <Link href="/dashboard/partner">Partner</Link>,
     },
   ]
