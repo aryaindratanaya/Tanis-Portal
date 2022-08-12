@@ -1,4 +1,11 @@
-import { collection, query, getDocs, addDoc } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore'
 import { db } from 'connectors/firebaseClient'
 import { Partner, partnerConverter } from 'backend/models/partner'
 
@@ -38,5 +45,14 @@ export const getPartners = async (): Promise<{
     return { partners: res, error: null }
   } catch (error: any) {
     return { partners: [], error: new Error(error.message) }
+  }
+}
+
+export const deletePartner = async (docID: string): Promise<Error | null> => {
+  try {
+    deleteDoc(doc(db, 'partners', docID))
+    return null
+  } catch (error: any) {
+    return new Error(error.message)
   }
 }

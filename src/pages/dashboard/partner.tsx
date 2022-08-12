@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import { Card, Form, Input, Button, Row, Col, Table, Radio } from 'antd'
-import { createPartner, getPartners } from 'backend/services/partner'
+import { DeleteOutlined } from '@ant-design/icons'
+import {
+  createPartner,
+  getPartners,
+  deletePartner,
+} from 'backend/services/partner'
 import { Partner } from 'backend/models/partner'
 import toast from 'libs/utils/toast'
 import { partnerType } from 'constants/partner'
@@ -77,6 +82,29 @@ const PartnerPage: NextPage = () => {
             columns={[
               { title: 'Name', dataIndex: 'name', key: 'name' },
               { title: 'Role', dataIndex: 'role', key: 'role' },
+              {
+                key: 'delete',
+                render: (partner) => (
+                  <DeleteOutlined
+                    onClick={() => {
+                      setLoading(true)
+                      deletePartner(partner.id)
+                        .then(() =>
+                          toast({ message: 'Partner has been deleted!' })
+                        )
+                        .catch((e) => {
+                          const error = new Error(e)
+                          toast({ type: 'error', message: error.message })
+                        })
+                        .finally(() => {
+                          getPartners().then((res) => setPartners(res.partners))
+                          setLoading(false)
+                        })
+                    }}
+                  />
+                ),
+                width: 1,
+              },
             ]}
             dataSource={partners.map((partner) => ({
               key: partner?.id,
