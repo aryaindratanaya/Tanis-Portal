@@ -28,8 +28,6 @@ const PartnerPage: NextPage = () => {
       .finally(() => setLoading(false))
   }
 
-  console.log(partners)
-
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={24} md={12} lg={9} xl={8}>
