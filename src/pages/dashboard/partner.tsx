@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import { Card, Form, Input, Button, Row, Col, Table, Radio } from 'antd'
-import { createPartner } from 'backend/services/partner'
+import { createPartner, getPartners } from 'backend/services/partner'
 import { Partner } from 'backend/models/partner'
 import toast from 'libs/utils/toast'
 import { partnerType } from 'constants/partner'
@@ -9,6 +9,13 @@ import s from 'styles/pages/dashboard/partner.module.css'
 
 const PartnerPage: NextPage = () => {
   const [isLoading, setLoading] = useState(false)
+  const [partners, setPartners] = useState<Partner[] | undefined>(undefined)
+
+  useEffect(() => {
+    getPartners().then((res) => {
+      setPartners(res)
+    })
+  }, [])
 
   const onFinish = (partner: Partner) => {
     setLoading(true)
@@ -69,6 +76,11 @@ const PartnerPage: NextPage = () => {
               { title: 'Name', dataIndex: 'name', key: 'name' },
               { title: 'Role', dataIndex: 'role', key: 'role' },
             ]}
+            dataSource={
+              partners === null || typeof partners === Error
+                ? undefined
+                : partners
+            }
           />
         </Card>
       </Col>

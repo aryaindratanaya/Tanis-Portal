@@ -1,10 +1,4 @@
-import {
-  collection,
-  query,
-  getDocs,
-  addDoc,
-  DocumentData,
-} from 'firebase/firestore'
+import { collection, query, getDocs, addDoc } from 'firebase/firestore'
 import { db } from 'connectors/firebaseClient'
 import { Partner, partnerConverter } from 'backend/models/partner'
 
@@ -26,12 +20,13 @@ export const getPartners = async () => {
     const q = query(partnerRef)
 
     const querySnapshot = await getDocs(q)
-    let res: DocumentData[] = []
+    let res: Partner[] = []
 
     querySnapshot.forEach((doc) => {
-      res.push(doc.data())
+      const partner: Partner = new Partner(<Partner>{ ...doc.data() })
+      res.push(partner)
     })
-    return res
+    return { res }
   } catch (error: any) {
     return new Error(error.message)
   }
