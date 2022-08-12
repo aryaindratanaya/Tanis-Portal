@@ -29,7 +29,10 @@ export const getPartners = async (): Promise<{
     let res: Partner[] = []
 
     querySnapshot.forEach((doc) => {
-      const partner: Partner = new Partner(<Partner>{ ...doc.data() })
+      const partner: Partner = new Partner(<Partner>{
+        id: doc.id,
+        ...doc.data(),
+      })
       res.push(partner)
     })
     return { partners: res, error: null }

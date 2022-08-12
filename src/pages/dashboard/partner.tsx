@@ -12,9 +12,7 @@ const PartnerPage: NextPage = () => {
   const [partners, setPartners] = useState<Partner[] | []>([])
 
   useEffect(() => {
-    getPartners().then((res) => {
-      setPartners(res.partners)
-    })
+    getPartners().then((res) => setPartners(res.partners))
   }, [])
 
   const onFinish = (partner: Partner) => {
@@ -25,7 +23,10 @@ const PartnerPage: NextPage = () => {
         const error = new Error(e)
         toast({ type: 'error', message: error.message })
       })
-      .finally(() => setLoading(false))
+      .finally(() => {
+        getPartners().then((res) => setPartners(res.partners))
+        setLoading(false)
+      })
   }
 
   return (
@@ -43,16 +44,16 @@ const PartnerPage: NextPage = () => {
             >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
-                  value={partnerType.boatProvider}
-                  className={s.partnerRadioButton}
-                >
-                  {partnerType.boatProvider}
-                </Radio.Button>
-                <Radio.Button
                   value={partnerType.salesPartner}
                   className={s.partnerRadioButton}
                 >
                   {partnerType.salesPartner}
+                </Radio.Button>
+                <Radio.Button
+                  value={partnerType.boatProvider}
+                  className={s.partnerRadioButton}
+                >
+                  {partnerType.boatProvider}
                 </Radio.Button>
               </Radio.Group>
             </Form.Item>
@@ -72,13 +73,15 @@ const PartnerPage: NextPage = () => {
       <Col xs={24} sm={24} md={12} lg={15} xl={16}>
         <Card>
           <Table
+            loading={isLoading}
             columns={[
               { title: 'Name', dataIndex: 'name', key: 'name' },
               { title: 'Role', dataIndex: 'role', key: 'role' },
             ]}
-            dataSource={partners.map((partner, index) => {
-              return { key: index, ...partner }
-            })}
+            dataSource={partners.map((partner) => ({
+              key: partner?.id,
+              ...partner,
+            }))}
           />
         </Card>
       </Col>
