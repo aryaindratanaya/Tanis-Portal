@@ -4,7 +4,7 @@ export class Partner {
   name: string
   role: string
 
-  constructor(name: string, role: string) {
+  constructor({ name, role }: { name: string; role: string }) {
     this.name = name
     this.role = role
   }
@@ -22,6 +22,6 @@ export const partnerConverter = {
     options: SnapshotOptions
   ) => {
     const data = snapshot.data(options)
-    return new Partner(data.name, data.role)
+    return new Partner({ name: data.name, role: data.role })
   },
 }

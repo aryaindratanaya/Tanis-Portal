@@ -10,7 +10,7 @@ import { Partner, partnerConverter } from 'backend/models/partner'
 
 export const createPartner = async (partner: Partner) => {
   try {
-    const partnerObj = new Partner(partner.name, partner.role)
+    const partnerObj = new Partner({ name: partner.name, role: partner.role })
     const partnerRef = collection(db, 'partners').withConverter(
       partnerConverter
     )
