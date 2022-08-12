@@ -9,11 +9,11 @@ import s from 'styles/pages/dashboard/partner.module.css'
 
 const PartnerPage: NextPage = () => {
   const [isLoading, setLoading] = useState(false)
-  const [partners, setPartners] = useState<Partner[] | undefined>(undefined)
+  const [partners, setPartners] = useState<Partner[] | []>([])
 
   useEffect(() => {
     getPartners().then((res) => {
-      setPartners(res)
+      setPartners(res.partners)
     })
   }, [])
 
@@ -27,6 +27,8 @@ const PartnerPage: NextPage = () => {
       })
       .finally(() => setLoading(false))
   }
+
+  console.log(partners)
 
   return (
     <Row gutter={[16, 16]}>
@@ -76,11 +78,9 @@ const PartnerPage: NextPage = () => {
               { title: 'Name', dataIndex: 'name', key: 'name' },
               { title: 'Role', dataIndex: 'role', key: 'role' },
             ]}
-            dataSource={
-              partners === null || typeof partners === Error
-                ? undefined
-                : partners
-            }
+            dataSource={partners.map((partner, index) => {
+              return { key: index, ...partner }
+            })}
           />
         </Card>
       </Col>
