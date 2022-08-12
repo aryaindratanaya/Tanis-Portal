@@ -7,17 +7,14 @@ import {
   doc,
 } from 'firebase/firestore'
 import { db } from 'connectors/firebaseClient'
-import { Partner, partnerConverter } from 'backend/models/partner'
+import { Partner } from 'backend/models/partner'
 
 export const createPartner = async (
   partner: Partner
 ): Promise<Error | null> => {
   try {
-    const partnerObj = new Partner({ name: partner.name, role: partner.role })
-    const partnerRef = collection(db, 'partners').withConverter(
-      partnerConverter
-    )
-    addDoc(partnerRef, partnerObj)
+    const partnerRef = collection(db, 'partners')
+    addDoc(partnerRef, partner)
     return null
   } catch (error: any) {
     return new Error(error.message)
