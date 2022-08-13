@@ -31,7 +31,6 @@ export const createBooking = async (
       throw new Error('Booking with Booking ID already exists!')
     }
 
-    console.log(request)
     // make booking from request
     const booking = new Booking({
       booking_id: request.booking_id,
