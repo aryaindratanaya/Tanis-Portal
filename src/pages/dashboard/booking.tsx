@@ -37,7 +37,10 @@ const BookingPage: NextPage = () => {
     setLoading(true)
     const payload: CreateBookingPayload = {
       booking_id: +request.booking_id,
-      ticket_range: { start: +request.minimum, end: +request.maximum },
+      ticket_range: {
+        start: request.ticket_range.start,
+        end: request.ticket_range.end,
+      },
       pic_name: request.pic_name,
       phone_number: request.phone_number,
       from: request.from,
@@ -47,6 +50,7 @@ const BookingPage: NextPage = () => {
       customer_type: request.customer_type,
       funnel_from: request.funnel_from,
     }
+
     createBooking(payload)
       .then(() =>
         toast({ message: 'A booking and its tickets has been created!' })
@@ -87,39 +91,13 @@ const BookingPage: NextPage = () => {
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <Form.Item
-              label="Ticket Range"
-              name="ticket_range"
-              style={{ width: '100%' }}
-            >
-              <Input.Group>
-                <Form.Item name="minimum">
-                  <InputNumber
-                    min={0}
-                    style={{ width: '45%', textAlign: 'center' }}
-                    placeholder="Minimum"
-                  />
+            <Form.Item label="Ticket Range">
+              <Input.Group compact>
+                <Form.Item name={['ticket_range', 'start']} noStyle>
+                  <InputNumber style={{ width: '50%' }} placeholder="Start" />
                 </Form.Item>
-                <Input
-                  style={{
-                    width: '10%',
-                    borderLeft: 0,
-                    borderRight: 0,
-                    pointerEvents: 'none',
-                    textAlign: 'center',
-                  }}
-                  placeholder="~"
-                  disabled
-                />
-                <Form.Item name="maximum">
-                  <InputNumber
-                    min={0}
-                    style={{
-                      width: '45%',
-                      textAlign: 'center',
-                    }}
-                    placeholder="Maximum"
-                  />
+                <Form.Item name={['ticket_range', 'end']} noStyle>
+                  <InputNumber style={{ width: '50%' }} placeholder="End" />
                 </Form.Item>
               </Input.Group>
             </Form.Item>
