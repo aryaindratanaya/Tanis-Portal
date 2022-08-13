@@ -22,7 +22,7 @@ export const createTicket = async (ticket: Ticket): Promise<Error | null> => {
   }
 }
 
-export const getTicket = async (): Promise<{
+export const getTickets = async (): Promise<{
   tickets: Ticket[]
   error: Error | null
 }> => {

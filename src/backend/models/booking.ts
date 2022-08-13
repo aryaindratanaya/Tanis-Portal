@@ -47,7 +47,7 @@ export class CreateBookingPayload {
   phone_number: string
   from: string
   to: string
-  roundtrip: boolean
+  roundtrip: string
   age_group: string
   customer_type: string
   funnel_from?: string
@@ -70,7 +70,7 @@ export class CreateBookingPayload {
     phone_number: string
     from: string
     to: string
-    roundtrip: boolean
+    roundtrip: string
     age_group: string
     customer_type: string
     funnel_from?: string

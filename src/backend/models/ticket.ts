@@ -7,7 +7,7 @@ export class Ticket {
   customer_name: string
   customer_type: string
   age_group: string
-  roundtrip: boolean
+  roundtrip: string
 
   constructor({
     id,
@@ -24,7 +24,7 @@ export class Ticket {
     customer_name: string
     customer_type: string
     age_group: string
-    roundtrip: boolean
+    roundtrip: string
   }) {
     this.id = id
     this.ticket_id = ticket_id

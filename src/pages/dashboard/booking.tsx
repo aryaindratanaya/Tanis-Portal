@@ -23,6 +23,7 @@ import {
   getBookings,
 } from 'backend/services/booking'
 import { harborType } from 'constants/booking'
+import { tripType } from 'constants/ticket'
 
 const BookingPage: NextPage = () => {
   const [isLoading, setLoading] = useState(false)
@@ -63,7 +64,7 @@ const BookingPage: NextPage = () => {
   const onClickDelete = (id: string) => {
     setLoading(true)
     deleteBooking(id)
-      .then(() => toast({ message: 'Partner has been deleted!' }))
+      .then(() => toast({ message: 'Booking has been deleted!' }))
       .catch((e) => {
         const error = new Error(e)
         toast({ type: 'error', message: error.message })
@@ -176,12 +177,22 @@ const BookingPage: NextPage = () => {
                 </Radio.Button>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="Roundtrip" name="roundtrip" initialValue={false}>
+            <Form.Item
+              label="Roundtrip"
+              name="roundtrip"
+              initialValue={tripType.oneway}
+            >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
-                <Radio.Button className={s.partnerRadioButton} value={false}>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={tripType.oneway}
+                >
                   One-Way
                 </Radio.Button>
-                <Radio.Button className={s.partnerRadioButton} value={true}>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={tripType.roundtrip}
+                >
                   Roundtrip
                 </Radio.Button>
               </Radio.Group>
