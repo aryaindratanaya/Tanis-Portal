@@ -2,7 +2,7 @@ import { QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore'
 
 export class Booking {
   id?: string
-  booking_id: string
+  booking_id: number
   pic_name: string
   phone_number: string
   from: string
@@ -21,7 +21,7 @@ export class Booking {
     created_at,
   }: {
     id?: string
-    booking_id: string
+    booking_id: number
     pic_name: string
     phone_number: string
     from: string
@@ -41,7 +41,7 @@ export class Booking {
 }
 
 export class CreateBookingPayload {
-  booking_id: string
+  booking_id: number
   ticket_range: { start: number; end: number }
   pic_name: string
   phone_number: string
@@ -64,7 +64,7 @@ export class CreateBookingPayload {
     customer_type,
     funnel_from,
   }: {
-    booking_id: string
+    booking_id: number
     ticket_range: { start: number; end: number }
     pic_name: string
     phone_number: string

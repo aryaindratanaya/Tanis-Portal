@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   where,
+  orderBy,
 } from 'firebase/firestore'
 import { db } from 'connectors/firebaseClient'
 import {
@@ -18,7 +19,6 @@ import { TICKET_REF } from 'backend/services/ticket'
 
 export const BOOKING_REF = 'bookings'
 
-// TODO: use transaction
 export const createBooking = async (
   request: CreateBookingPayload
 ): Promise<Error | null> => {
@@ -31,6 +31,7 @@ export const createBooking = async (
       throw new Error('Booking with Booking ID already exists!')
     }
 
+    console.log(request)
     // make booking from request
     const booking = new Booking({
       booking_id: request.booking_id,
@@ -54,6 +55,7 @@ export const createBooking = async (
       i++
     ) {
       const ticket = new Ticket({
+        ticket_id: i,
         booking_id: request.booking_id,
         customer_name: request.pic_name,
         customer_type: request.customer_type,
@@ -70,7 +72,7 @@ export const createBooking = async (
 }
 
 export const getBookingByBookingId = async (
-  bookingID: string
+  bookingID: number
 ): Promise<{
   bookings: Booking[]
   error: Error | null
@@ -101,7 +103,7 @@ export const getBookings = async (): Promise<{
 }> => {
   try {
     const ref = collection(db, BOOKING_REF)
-    const q = query(ref)
+    const q = query(ref, orderBy('booking_id', 'desc'))
 
     const querySnapshot = await getDocs(q)
     let res: Booking[] = []

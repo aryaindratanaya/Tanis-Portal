@@ -1,12 +1,27 @@
 import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
-import { Card, Row, Col, Table, Form, Input, Radio, Button } from 'antd'
+import {
+  Card,
+  Row,
+  Col,
+  Table,
+  Form,
+  Input,
+  Radio,
+  Button,
+  InputNumber,
+} from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 
 import s from 'styles/pages/dashboard/partner.module.css'
 import toast from 'libs/utils/toast'
 import { ageGroup, customerType } from 'constants/ticket'
 import { Booking, CreateBookingPayload } from 'backend/models/booking'
-import { createBooking, getBookings } from 'backend/services/booking'
+import {
+  createBooking,
+  deleteBooking,
+  getBookings,
+} from 'backend/services/booking'
 import { harborType } from 'constants/booking'
 
 const BookingPage: NextPage = () => {
@@ -20,8 +35,8 @@ const BookingPage: NextPage = () => {
   const onFinish = (request: any) => {
     setLoading(true)
     const payload: CreateBookingPayload = {
-      booking_id: request.booking_id,
-      ticket_range: { start: request.minimum, end: request.maximum },
+      booking_id: +request.booking_id,
+      ticket_range: { start: +request.minimum, end: +request.maximum },
       pic_name: request.pic_name,
       phone_number: request.phone_number,
       from: request.from,
@@ -32,10 +47,23 @@ const BookingPage: NextPage = () => {
       funnel_from: request.funnel_from,
     }
     createBooking(payload)
-      // TODO: cannot catch error yet (booking id already exists)
       .then(() =>
         toast({ message: 'A booking and its tickets has been created!' })
       )
+      .catch((e) => {
+        const error = new Error(e)
+        toast({ type: 'error', message: error.message })
+      })
+      .finally(() => {
+        getBookings().then((res) => setBookings(res.bookings))
+        setLoading(false)
+      })
+  }
+
+  const onClickDelete = (id: string) => {
+    setLoading(true)
+    deleteBooking(id)
+      .then(() => toast({ message: 'Partner has been deleted!' }))
       .catch((e) => {
         const error = new Error(e)
         toast({ type: 'error', message: error.message })
@@ -51,9 +79,12 @@ const BookingPage: NextPage = () => {
       <Col xs={24} sm={24} md={12} lg={9} xl={8}>
         <Card>
           <Form layout="vertical" onFinish={onFinish}>
-            {/* TODO: disable booking ID, auto fill */}
             <Form.Item label="Booking ID" name="booking_id">
-              <Input placeholder="Please input your Booking ID" />
+              <InputNumber
+                min={0}
+                placeholder="Please input your Booking ID"
+                style={{ width: '100%' }}
+              />
             </Form.Item>
             <Form.Item
               label="Ticket Range"
@@ -62,7 +93,8 @@ const BookingPage: NextPage = () => {
             >
               <Input.Group>
                 <Form.Item name="minimum">
-                  <Input
+                  <InputNumber
+                    min={0}
                     style={{ width: '45%', textAlign: 'center' }}
                     placeholder="Minimum"
                   />
@@ -79,7 +111,8 @@ const BookingPage: NextPage = () => {
                   disabled
                 />
                 <Form.Item name="maximum">
-                  <Input
+                  <InputNumber
+                    min={0}
                     style={{
                       width: '45%',
                       textAlign: 'center',
@@ -117,7 +150,11 @@ const BookingPage: NextPage = () => {
                 </Radio.Button>
               </Radio.Group>
             </Form.Item>
-            <Form.Item label="To" name="to" initialValue={harborType.sanur}>
+            <Form.Item
+              label="To"
+              name="to"
+              initialValue={harborType.nusaPenida}
+            >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
                   className={s.partnerRadioButton}
@@ -231,6 +268,13 @@ const BookingPage: NextPage = () => {
                 title: 'Created At',
                 dataIndex: 'created_at',
                 key: 'created_at',
+              },
+              {
+                key: 'delete',
+                render: (booking) => (
+                  <DeleteOutlined onClick={() => onClickDelete(booking.id)} />
+                ),
+                width: 1,
               },
             ]}
             dataSource={bookings.map((booking) => ({
