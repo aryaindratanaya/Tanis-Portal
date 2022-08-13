@@ -96,7 +96,7 @@ export const bookingConverter = {
       phone_number: booking.phone_number,
       from: booking.from,
       to: booking.to,
-      funnel_from: booking.funnel_from,
+      funnel_from: booking.funnel_from ? booking.funnel_from : '',
       created_at: booking.created_at,
     }
   },
@@ -111,7 +111,7 @@ export const bookingConverter = {
       phone_number: booking.phone_number,
       from: booking.from,
       to: booking.to,
-      funnel_from: booking.funnel_from,
+      funnel_from: booking?.funnel_from,
       created_at: booking.created_at,
     })
   },

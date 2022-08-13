@@ -44,6 +44,7 @@ export const createBooking = async (
     const bookingRef = collection(db, BOOKING_REF).withConverter(
       bookingConverter
     )
+
     addDoc(bookingRef, booking)
 
     // make tickets from request
