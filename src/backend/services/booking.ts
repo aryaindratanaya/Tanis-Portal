@@ -23,14 +23,6 @@ export const createBooking = async (
   request: CreateBookingPayload
 ): Promise<Error | null> => {
   try {
-    // check if booking_id is used
-    const checkBookingDoesExist = await getBookingByBookingId(
-      request.booking_id
-    )
-    if (checkBookingDoesExist.bookings.length !== 0) {
-      throw new Error('Booking with Booking ID already exists!')
-    }
-
     // make booking from request
     const booking = new Booking({
       booking_id: request.booking_id,
@@ -44,6 +36,7 @@ export const createBooking = async (
     const bookingRef = collection(db, BOOKING_REF).withConverter(
       bookingConverter
     )
+
     addDoc(bookingRef, booking)
 
     // make tickets from request

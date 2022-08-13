@@ -13,3 +13,11 @@ export const ageGroup = {
   adult: ageGroupAdult,
   child: ageGroupChild,
 }
+
+export const roundtrip = 'Roundtrip'
+export const oneway = 'One-Way'
+
+export const tripType = {
+  roundtrip: roundtrip,
+  oneway: oneway,
+}

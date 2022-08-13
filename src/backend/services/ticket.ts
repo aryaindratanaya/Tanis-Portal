@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   where,
+  orderBy,
 } from 'firebase/firestore'
 import { db } from 'connectors/firebaseClient'
 import { Ticket } from 'backend/models/ticket'
@@ -22,14 +23,17 @@ export const createTicket = async (ticket: Ticket): Promise<Error | null> => {
   }
 }
 
-export const getTicket = async (): Promise<{
+export const getTickets = async (): Promise<{
   tickets: Ticket[]
   error: Error | null
 }> => {
   try {
     const ref = collection(db, TICKET_REF)
-    const q = query(ref)
-
+    const q = query(
+      ref,
+      // orderBy('booking_id', 'desc')
+      orderBy('ticket_id', 'desc')
+    )
     const querySnapshot = await getDocs(q)
     let res: Ticket[] = []
 
@@ -46,8 +50,8 @@ export const getTicket = async (): Promise<{
   }
 }
 
-export const getTicketByBookingId = async (
-  bookingID: string
+export const getTicketsByBookingId = async (
+  bookingID: number | null
 ): Promise<{
   tickets: Ticket[]
   error: Error | null
