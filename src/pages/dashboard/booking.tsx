@@ -31,6 +31,7 @@ const BookingPage: NextPage = () => {
   const [isLoading, setLoading] = useState(false)
   const [bookings, setBookings] = useState<Booking[] | []>([])
   const [isModalVisible, setModalVisible] = useState(false)
+  const [sltBookingId, setSltBookingId] = useState(null)
 
   useEffect(() => {
     getBookings().then((res) => setBookings(res.bookings))
@@ -309,7 +310,13 @@ const BookingPage: NextPage = () => {
                   dataIndex: 'booking_id',
                   key: 'booking_id',
                   render: (bookingId) => (
-                    <Button type="link" onClick={() => setModalVisible(true)}>
+                    <Button
+                      type="link"
+                      onClick={() => {
+                        setSltBookingId(bookingId)
+                        setModalVisible(true)
+                      }}
+                    >
                       {bookingId}
                     </Button>
                   ),
@@ -353,6 +360,7 @@ const BookingPage: NextPage = () => {
       </Row>
 
       <BookingDetails
+        sltBookingId={sltBookingId}
         isModalVisible={isModalVisible}
         setModalVisible={setModalVisible}
       />

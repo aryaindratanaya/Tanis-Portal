@@ -50,8 +50,8 @@ export const getTickets = async (): Promise<{
   }
 }
 
-export const getTicketByBookingId = async (
-  bookingID: string
+export const getTicketsByBookingId = async (
+  bookingID: number | null
 ): Promise<{
   tickets: Ticket[]
   error: Error | null
