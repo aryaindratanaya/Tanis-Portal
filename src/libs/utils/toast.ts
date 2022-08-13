@@ -12,6 +12,6 @@ export default function toast({
   notification[type]({
     message: message,
     description: description,
-    placement: 'bottomRight',
+    placement: 'topRight',
   })
 }
