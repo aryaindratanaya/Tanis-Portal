@@ -34,6 +34,20 @@ const PartnerPage: NextPage = () => {
       })
   }
 
+  const onClickDelete = (id: string) => {
+    setLoading(true)
+    deletePartner(id)
+      .then(() => toast({ message: 'Partner has been deleted!' }))
+      .catch((e) => {
+        const error = new Error(e)
+        toast({ type: 'error', message: error.message })
+      })
+      .finally(() => {
+        getPartners().then((res) => setPartners(res.partners))
+        setLoading(false)
+      })
+  }
+
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={24} md={12} lg={9} xl={8}>
@@ -85,23 +99,7 @@ const PartnerPage: NextPage = () => {
               {
                 key: 'delete',
                 render: (partner) => (
-                  <DeleteOutlined
-                    onClick={() => {
-                      setLoading(true)
-                      deletePartner(partner.id)
-                        .then(() =>
-                          toast({ message: 'Partner has been deleted!' })
-                        )
-                        .catch((e) => {
-                          const error = new Error(e)
-                          toast({ type: 'error', message: error.message })
-                        })
-                        .finally(() => {
-                          getPartners().then((res) => setPartners(res.partners))
-                          setLoading(false)
-                        })
-                    }}
-                  />
+                  <DeleteOutlined onClick={() => onClickDelete(partner.id)} />
                 ),
                 width: 1,
               },

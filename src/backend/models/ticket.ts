@@ -1,3 +1,5 @@
+import { QueryDocumentSnapshot, SnapshotOptions } from 'firebase/firestore'
+
 export class Ticket {
   id?: string
   booking_id: string
@@ -28,4 +30,29 @@ export class Ticket {
     this.age_group = age_group
     this.roundtrip = roundtrip
   }
+}
+
+export const ticketConverter = {
+  toFirestore: (ticket: Ticket) => {
+    return {
+      booking_id: ticket.booking_id,
+      customer_name: ticket.customer_name,
+      customer_type: ticket.customer_type,
+      age_group: ticket.age_group,
+      roundtrip: ticket.roundtrip,
+    }
+  },
+  fromFirestore: (
+    snapshot: QueryDocumentSnapshot,
+    options: SnapshotOptions
+  ) => {
+    const ticket = snapshot.data(options)
+    return new Ticket({
+      booking_id: ticket.booking_id,
+      customer_name: ticket.customer_name,
+      customer_type: ticket.customer_type,
+      age_group: ticket.age_group,
+      roundtrip: ticket.roundtrip,
+    })
+  },
 }

@@ -1,13 +1,57 @@
+import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import { Card, Row, Col, Table, Form, Input, Radio, Button } from 'antd'
+
 import s from 'styles/pages/dashboard/partner.module.css'
+import toast from 'libs/utils/toast'
+import { ageGroup, customerType } from 'constants/ticket'
+import { Booking, CreateBookingPayload } from 'backend/models/booking'
+import { createBooking, getBookings } from 'backend/services/booking'
+import { harborType } from 'constants/booking'
 
 const BookingPage: NextPage = () => {
+  const [isLoading, setLoading] = useState(false)
+  const [bookings, setBookings] = useState<Booking[] | []>([])
+
+  useEffect(() => {
+    getBookings().then((res) => setBookings(res.bookings))
+  }, [])
+
+  const onFinish = (request: any) => {
+    setLoading(true)
+    const payload: CreateBookingPayload = {
+      booking_id: request.booking_id,
+      ticket_range: { start: request.minimum, end: request.maximum },
+      pic_name: request.pic_name,
+      phone_number: request.phone_number,
+      from: request.from,
+      to: request.to,
+      roundtrip: request.roundtrip,
+      age_group: request.age_group,
+      customer_type: request.customer_type,
+      funnel_from: request.funnel_from,
+    }
+    createBooking(payload)
+      // TODO: cannot catch error yet (booking id already exists)
+      .then(() =>
+        toast({ message: 'A booking and its tickets has been created!' })
+      )
+      .catch((e) => {
+        const error = new Error(e)
+        toast({ type: 'error', message: error.message })
+      })
+      .finally(() => {
+        getBookings().then((res) => setBookings(res.bookings))
+        setLoading(false)
+      })
+  }
+
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={24} md={12} lg={9} xl={8}>
         <Card>
-          <Form layout="vertical">
+          <Form layout="vertical" onFinish={onFinish}>
+            {/* TODO: disable booking ID, auto fill */}
             <Form.Item label="Booking ID" name="booking_id">
               <Input placeholder="Please input your Booking ID" />
             </Form.Item>
@@ -17,10 +61,12 @@ const BookingPage: NextPage = () => {
               style={{ width: '100%' }}
             >
               <Input.Group>
-                <Input
-                  style={{ width: '45%', textAlign: 'center' }}
-                  placeholder="Maximum"
-                />
+                <Form.Item name="minimum">
+                  <Input
+                    style={{ width: '45%', textAlign: 'center' }}
+                    placeholder="Minimum"
+                  />
+                </Form.Item>
                 <Input
                   style={{
                     width: '10%',
@@ -32,13 +78,15 @@ const BookingPage: NextPage = () => {
                   placeholder="~"
                   disabled
                 />
-                <Input
-                  style={{
-                    width: '45%',
-                    textAlign: 'center',
-                  }}
-                  placeholder="Maximum"
-                />
+                <Form.Item name="maximum">
+                  <Input
+                    style={{
+                      width: '45%',
+                      textAlign: 'center',
+                    }}
+                    placeholder="Maximum"
+                  />
+                </Form.Item>
               </Input.Group>
             </Form.Item>
             <Form.Item label="PIC Name" name="pic_name">
@@ -47,11 +95,49 @@ const BookingPage: NextPage = () => {
             <Form.Item label="Phone Number" name="phone_number">
               <Input placeholder="Please input your phone number" />
             </Form.Item>
-            <Form.Item label="From" name="from">
-              <Input placeholder="Please input your origin harbor" />
+            <Form.Item label="From" name="from" initialValue={harborType.sanur}>
+              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={harborType.sanur}
+                >
+                  Sanur
+                </Radio.Button>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={harborType.lembongan}
+                >
+                  Lembongan
+                </Radio.Button>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={harborType.nusaPenida}
+                >
+                  Nusa Penida
+                </Radio.Button>
+              </Radio.Group>
             </Form.Item>
-            <Form.Item label="To" name="to">
-              <Input placeholder="Please input your destination harbor" />
+            <Form.Item label="To" name="to" initialValue={harborType.sanur}>
+              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={harborType.sanur}
+                >
+                  Sanur
+                </Radio.Button>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={harborType.lembongan}
+                >
+                  Lembongan
+                </Radio.Button>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={harborType.nusaPenida}
+                >
+                  Nusa Penida
+                </Radio.Button>
+              </Radio.Group>
             </Form.Item>
             <Form.Item label="Roundtrip" name="roundtrip" initialValue={false}>
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
@@ -63,11 +149,56 @@ const BookingPage: NextPage = () => {
                 </Radio.Button>
               </Radio.Group>
             </Form.Item>
+            <Form.Item
+              label="Age Group"
+              name="age_group"
+              initialValue={ageGroup.adult}
+            >
+              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={ageGroup.adult}
+                >
+                  Adult
+                </Radio.Button>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={ageGroup.child}
+                >
+                  Child
+                </Radio.Button>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item
+              label="Customer Type"
+              name="customer_type"
+              initialValue={customerType.wni}
+            >
+              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={customerType.wni}
+                >
+                  Local
+                </Radio.Button>
+                <Radio.Button
+                  className={s.partnerRadioButton}
+                  value={customerType.wna}
+                >
+                  WNA
+                </Radio.Button>
+              </Radio.Group>
+            </Form.Item>
             <Form.Item label="Funnel From" name="funnel_from">
               <Input placeholder="Please input your referrer" />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" block>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={isLoading}
+                block
+              >
                 Submit
               </Button>
             </Form.Item>
@@ -102,6 +233,10 @@ const BookingPage: NextPage = () => {
                 key: 'created_at',
               },
             ]}
+            dataSource={bookings.map((booking) => ({
+              key: booking?.id,
+              ...booking,
+            }))}
             scroll={{ x: 'max-content' }}
           />
         </Card>

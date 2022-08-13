@@ -13,7 +13,7 @@ import {
   CreateBookingPayload,
   bookingConverter,
 } from 'backend/models/booking'
-import { Ticket } from 'backend/models/ticket'
+import { Ticket, ticketConverter } from 'backend/models/ticket'
 import { TICKET_REF } from 'backend/services/ticket'
 
 export const BOOKING_REF = 'bookings'
@@ -27,7 +27,7 @@ export const createBooking = async (
     const checkBookingDoesExist = await getBookingByBookingId(
       request.booking_id
     )
-    if (checkBookingDoesExist.bookings) {
+    if (checkBookingDoesExist.bookings.length !== 0) {
       throw new Error('Booking with Booking ID already exists!')
     }
 
@@ -39,6 +39,7 @@ export const createBooking = async (
       from: request.from,
       to: request.to,
       funnel_from: request.funnel_from,
+      created_at: new Date().toISOString().split('T')[0],
     })
     const bookingRef = collection(db, BOOKING_REF).withConverter(
       bookingConverter
@@ -46,7 +47,7 @@ export const createBooking = async (
     addDoc(bookingRef, booking)
 
     // make tickets from request
-    const ticketRef = collection(db, TICKET_REF)
+    const ticketRef = collection(db, TICKET_REF).withConverter(ticketConverter)
     for (
       let i = request.ticket_range.start;
       i <= request.ticket_range.end;
@@ -94,7 +95,7 @@ export const getBookingByBookingId = async (
   }
 }
 
-export const getBooking = async (): Promise<{
+export const getBookings = async (): Promise<{
   bookings: Booking[]
   error: Error | null
 }> => {
