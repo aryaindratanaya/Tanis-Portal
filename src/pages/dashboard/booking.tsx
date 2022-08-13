@@ -10,6 +10,7 @@ import {
   Radio,
   Button,
   InputNumber,
+  Select,
 } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 
@@ -84,14 +85,14 @@ const BookingPage: NextPage = () => {
       <Col xs={24} sm={24} md={12} lg={9} xl={8}>
         <Card>
           <Form layout="vertical" onFinish={onFinish}>
-            <Form.Item label="Booking ID" name="booking_id">
+            <Form.Item label="Booking ID" name="booking_id" required>
               <InputNumber
                 min={0}
                 placeholder="Please input your Booking ID"
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <Form.Item label="Ticket Range">
+            <Form.Item label="Ticket Range" required>
               <Input.Group compact>
                 <Form.Item name={['ticket_range', 'start']} noStyle>
                   <InputNumber style={{ width: '50%' }} placeholder="Start" />
@@ -101,64 +102,49 @@ const BookingPage: NextPage = () => {
                 </Form.Item>
               </Input.Group>
             </Form.Item>
-            <Form.Item label="PIC Name" name="pic_name">
+            <Form.Item label="PIC Name" name="pic_name" required>
               <Input placeholder="Please input your PIC name" />
             </Form.Item>
-            <Form.Item label="Phone Number" name="phone_number">
+            <Form.Item label="Phone Number" name="phone_number" required>
               <Input placeholder="Please input your phone number" />
             </Form.Item>
-            <Form.Item label="From" name="from" initialValue={harborType.sanur}>
-              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
-                <Radio.Button
-                  className={s.partnerRadioButton}
-                  value={harborType.sanur}
-                >
-                  Sanur
-                </Radio.Button>
-                <Radio.Button
-                  className={s.partnerRadioButton}
-                  value={harborType.lembongan}
-                >
+            <Form.Item
+              label="From"
+              name="from"
+              initialValue={harborType.sanur}
+              required
+            >
+              <Select>
+                <Select.Option value={harborType.sanur}>Sanur</Select.Option>
+                <Select.Option value={harborType.lembongan}>
                   Lembongan
-                </Radio.Button>
-                <Radio.Button
-                  className={s.partnerRadioButton}
-                  value={harborType.nusaPenida}
-                >
+                </Select.Option>
+                <Select.Option value={harborType.nusaPenida}>
                   Nusa Penida
-                </Radio.Button>
-              </Radio.Group>
+                </Select.Option>
+              </Select>
             </Form.Item>
             <Form.Item
               label="To"
               name="to"
-              initialValue={harborType.nusaPenida}
+              initialValue={harborType.lembongan}
+              required
             >
-              <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
-                <Radio.Button
-                  className={s.partnerRadioButton}
-                  value={harborType.sanur}
-                >
-                  Sanur
-                </Radio.Button>
-                <Radio.Button
-                  className={s.partnerRadioButton}
-                  value={harborType.lembongan}
-                >
+              <Select>
+                <Select.Option value={harborType.sanur}>Sanur</Select.Option>
+                <Select.Option value={harborType.lembongan}>
                   Lembongan
-                </Radio.Button>
-                <Radio.Button
-                  className={s.partnerRadioButton}
-                  value={harborType.nusaPenida}
-                >
+                </Select.Option>
+                <Select.Option value={harborType.nusaPenida}>
                   Nusa Penida
-                </Radio.Button>
-              </Radio.Group>
+                </Select.Option>
+              </Select>
             </Form.Item>
             <Form.Item
               label="Roundtrip"
               name="roundtrip"
               initialValue={tripType.oneway}
+              required
             >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
@@ -179,6 +165,7 @@ const BookingPage: NextPage = () => {
               label="Age Group"
               name="age_group"
               initialValue={ageGroup.adult}
+              required
             >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
@@ -199,6 +186,7 @@ const BookingPage: NextPage = () => {
               label="Customer Type"
               name="customer_type"
               initialValue={customerType.wni}
+              required
             >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
