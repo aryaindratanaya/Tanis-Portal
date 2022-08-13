@@ -85,34 +85,92 @@ const BookingPage: NextPage = () => {
       <Col xs={24} sm={24} md={12} lg={9} xl={8}>
         <Card>
           <Form layout="vertical" onFinish={onFinish}>
-            <Form.Item label="Booking ID" name="booking_id" required>
+            <Form.Item
+              label="Booking ID"
+              name="booking_id"
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
+            >
               <InputNumber
                 min={0}
                 placeholder="Please input your Booking ID"
                 style={{ width: '100%' }}
               />
             </Form.Item>
-            <Form.Item label="Ticket Range" required>
+            <Form.Item
+              label="Ticket Range"
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
+            >
               <Input.Group compact>
-                <Form.Item name={['ticket_range', 'start']} noStyle>
+                <Form.Item
+                  name={['ticket_range', 'start']}
+                  noStyle
+                  rules={[
+                    {
+                      required: true,
+                      message: 'This field cannot be empty!',
+                    },
+                  ]}
+                >
                   <InputNumber style={{ width: '50%' }} placeholder="Start" />
                 </Form.Item>
-                <Form.Item name={['ticket_range', 'end']} noStyle>
+                <Form.Item
+                  name={['ticket_range', 'end']}
+                  noStyle
+                  rules={[
+                    {
+                      required: true,
+                      message: 'This field cannot be empty!',
+                    },
+                  ]}
+                >
                   <InputNumber style={{ width: '50%' }} placeholder="End" />
                 </Form.Item>
               </Input.Group>
             </Form.Item>
-            <Form.Item label="PIC Name" name="pic_name" required>
+            <Form.Item
+              label="PIC Name"
+              name="pic_name"
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
+            >
               <Input placeholder="Please input your PIC name" />
             </Form.Item>
-            <Form.Item label="Phone Number" name="phone_number" required>
+            <Form.Item
+              label="Phone Number"
+              name="phone_number"
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
+            >
               <Input placeholder="Please input your phone number" />
             </Form.Item>
             <Form.Item
               label="From"
               name="from"
               initialValue={harborType.sanur}
-              required
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
             >
               <Select>
                 <Select.Option value={harborType.sanur}>Sanur</Select.Option>
@@ -128,7 +186,12 @@ const BookingPage: NextPage = () => {
               label="To"
               name="to"
               initialValue={harborType.lembongan}
-              required
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
             >
               <Select>
                 <Select.Option value={harborType.sanur}>Sanur</Select.Option>
@@ -144,7 +207,12 @@ const BookingPage: NextPage = () => {
               label="Roundtrip"
               name="roundtrip"
               initialValue={tripType.oneway}
-              required
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
             >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
@@ -165,7 +233,12 @@ const BookingPage: NextPage = () => {
               label="Age Group"
               name="age_group"
               initialValue={ageGroup.adult}
-              required
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
             >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
@@ -186,7 +259,12 @@ const BookingPage: NextPage = () => {
               label="Customer Type"
               name="customer_type"
               initialValue={customerType.wni}
-              required
+              rules={[
+                {
+                  required: true,
+                  message: 'This field cannot be empty!',
+                },
+              ]}
             >
               <Radio.Group buttonStyle="solid" style={{ width: '100%' }}>
                 <Radio.Button
