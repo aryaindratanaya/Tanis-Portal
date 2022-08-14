@@ -1,13 +1,12 @@
 import { NextPage } from 'next'
 import { Card, Statistic, Row, Col, Tooltip } from 'antd'
-import { Line } from '@ant-design/plots'
+import { Line, Pie, Bar } from '@ant-design/plots'
 import { ticketGrowth } from 'data/ticketGrowth'
 import {
   ArrowDownOutlined,
   ArrowUpOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons'
-import { Pie } from '@ant-design/plots'
 
 const Home: NextPage = () => {
   const DemoLine = () => {
@@ -77,6 +76,60 @@ const Home: NextPage = () => {
       ],
     }
     return <Pie {...config} />
+  }
+
+  const DemoBar = () => {
+    const data = [
+      {
+        country: 'Sold',
+        year: 'Sanur-Penida',
+        value: 1000,
+      },
+      {
+        country: 'Target',
+        year: 'Sanur-Penida',
+        value: 300,
+      },
+      {
+        country: 'Sold',
+        year: 'Sanur-Lembongan',
+        value: 1000,
+      },
+      {
+        country: 'Target',
+        year: 'Sanur-Lembongan',
+        value: 250,
+      },
+      {
+        country: 'Sold',
+        year: 'Lembongan-Penida',
+        value: 1000,
+      },
+      {
+        country: 'Target',
+        year: 'Lembongan-Penida',
+        value: 400,
+      },
+    ]
+    const config = {
+      data,
+      xField: 'value',
+      yField: 'year',
+      seriesField: 'country',
+      isPercent: true,
+      isStack: true,
+
+      label: {
+        position: 'middle',
+        content: (item: any) => {
+          return item.value.toFixed(2)
+        },
+        style: {
+          fill: '#fff',
+        },
+      },
+    }
+    return <Bar {...config} />
   }
 
   return (
@@ -200,17 +253,17 @@ const Home: NextPage = () => {
       </Col>
       <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Card
-          title="Growth of Tickets Sold"
+          title="Targets of Tickets Sold"
           extra={
             <Tooltip
               placement="topRight"
-              title="Growth of tickets sold this month"
+              title="Targets of tickets sold this month"
             >
               <InfoCircleOutlined />
             </Tooltip>
           }
         >
-          <DemoLine />
+          <DemoBar />
         </Card>
       </Col>
       <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
@@ -226,6 +279,21 @@ const Home: NextPage = () => {
           }
         >
           <DemoPie />
+        </Card>
+      </Col>
+      <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
+        <Card
+          title="Growth of Tickets Sold"
+          extra={
+            <Tooltip
+              placement="topRight"
+              title="Growth of tickets sold this month"
+            >
+              <InfoCircleOutlined />
+            </Tooltip>
+          }
+        >
+          <DemoLine />
         </Card>
       </Col>
     </Row>
