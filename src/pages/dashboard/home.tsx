@@ -251,7 +251,7 @@ const Home: NextPage = () => {
           </Row>
         </Card>
       </Col>
-      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
+      <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
         <Card
           title="Targets of Tickets Sold"
           extra={
@@ -266,7 +266,7 @@ const Home: NextPage = () => {
           <DemoBar />
         </Card>
       </Col>
-      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
+      <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
         <Card
           title="Route Share"
           extra={
