@@ -79,57 +79,92 @@ const Home: NextPage = () => {
   }
 
   const DemoBar = () => {
-    const data = [
-      {
-        country: 'Sold',
-        year: 'Sanur-Penida',
-        value: 1000,
-      },
-      {
-        country: 'Target',
-        year: 'Sanur-Penida',
-        value: 300,
-      },
-      {
-        country: 'Sold',
-        year: 'Sanur-Lembongan',
-        value: 1000,
-      },
-      {
-        country: 'Target',
-        year: 'Sanur-Lembongan',
-        value: 250,
-      },
-      {
-        country: 'Sold',
-        year: 'Lembongan-Penida',
-        value: 1000,
-      },
-      {
-        country: 'Target',
-        year: 'Lembongan-Penida',
-        value: 400,
-      },
-    ]
-    const config = {
-      data,
-      xField: 'value',
-      yField: 'year',
-      seriesField: 'country',
-      isPercent: true,
-      isStack: true,
-
-      label: {
-        position: 'middle',
-        content: (item: any) => {
-          return item.value.toFixed(2)
-        },
-        style: {
-          fill: '#fff',
-        },
-      },
-    }
-    return <Bar {...config} />
+    return (
+      <Bar
+        data={[
+          {
+            label: 'S-P',
+            type: 'Sold',
+            value: 2800,
+          },
+          {
+            label: 'S-P',
+            type: 'Target',
+            value: 2260,
+          },
+          {
+            label: 'S-L',
+            type: 'Sold',
+            value: 2800,
+          },
+          {
+            label: 'S-L',
+            type: 'Target',
+            value: 2260,
+          },
+          {
+            label: 'L-P',
+            type: 'Sold',
+            value: 2800,
+          },
+          {
+            label: 'L-P',
+            type: 'Target',
+            value: 2260,
+          },
+          {
+            label: 'S-G',
+            type: 'Sold',
+            value: 2100,
+          },
+          {
+            label: 'S-G',
+            type: 'Target',
+            value: 2260,
+          },
+          {
+            label: 'G-P',
+            type: 'Sold',
+            value: 2260,
+          },
+          {
+            label: 'G-P',
+            type: 'Target',
+            value: 2300,
+          },
+          {
+            label: 'L-G',
+            type: 'Sold',
+            value: 2260,
+          },
+          {
+            label: 'L-G',
+            type: 'Target',
+            value: 2280,
+          },
+        ]}
+        color={['#F6C022', '#657798']}
+        isGroup={true}
+        xField="value"
+        yField="label"
+        seriesField="type"
+        marginRatio={0}
+        label={{
+          position: 'middle',
+          layout: [
+            {
+              type: 'interval-adjust-position',
+            },
+            {
+              type: 'interval-hide-overlap',
+            },
+            {
+              type: 'adjust-color',
+            },
+          ],
+        }}
+      />
+    )
   }
 
   return (
@@ -253,21 +288,6 @@ const Home: NextPage = () => {
       </Col>
       <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
         <Card
-          title="Targets of Tickets Sold"
-          extra={
-            <Tooltip
-              placement="topRight"
-              title="Targets of tickets sold this month"
-            >
-              <InfoCircleOutlined />
-            </Tooltip>
-          }
-        >
-          <DemoBar />
-        </Card>
-      </Col>
-      <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
-        <Card
           title="Route Share"
           extra={
             <Tooltip
@@ -279,6 +299,21 @@ const Home: NextPage = () => {
           }
         >
           <DemoPie />
+        </Card>
+      </Col>
+      <Col xs={24} sm={24} md={24} lg={12} xl={12} xxl={12}>
+        <Card
+          title="Actual vs Targets of Tickets Sold"
+          extra={
+            <Tooltip
+              placement="topRight"
+              title="Actual vs Targets of Tickets Sold in each route"
+            >
+              <InfoCircleOutlined />
+            </Tooltip>
+          }
+        >
+          <DemoBar />
         </Card>
       </Col>
       <Col xs={24} sm={24} md={24} lg={24} xl={24} xxl={24}>
