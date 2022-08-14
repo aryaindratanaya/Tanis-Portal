@@ -7,6 +7,7 @@ import {
   ArrowUpOutlined,
   InfoCircleOutlined,
 } from '@ant-design/icons'
+import { Pie } from '@ant-design/plots'
 
 const Home: NextPage = () => {
   const DemoLine = () => {
@@ -28,6 +29,56 @@ const Home: NextPage = () => {
 
     return <Line {...config} />
   }
+
+  const DemoPie = () => {
+    const data = [
+      {
+        type: 'Sanur-Penida',
+        value: 27,
+      },
+      {
+        type: 'Sanur-Lembongan',
+        value: 25,
+      },
+      {
+        type: 'Lembongan-Penida',
+        value: 18,
+      },
+      {
+        type: 'Sanur-Gili',
+        value: 15,
+      },
+      {
+        type: 'Gili-Penida',
+        value: 10,
+      },
+      {
+        type: 'Lembongan-Gili',
+        value: 5,
+      },
+    ]
+    const config = {
+      appendPadding: 10,
+      data,
+      angleField: 'value',
+      colorField: 'type',
+      radius: 0.8,
+      label: {
+        type: 'outer',
+        content: '{name} {percentage}',
+      },
+      interactions: [
+        {
+          type: 'pie-legend-active',
+        },
+        {
+          type: 'element-active',
+        },
+      ],
+    }
+    return <Pie {...config} />
+  }
+
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={12} md={12} lg={12} xl={6} xxl={6}>
@@ -149,7 +200,7 @@ const Home: NextPage = () => {
       </Col>
       <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
         <Card
-          title="Tickets Sold Growth"
+          title="Growth of Tickets Sold"
           extra={
             <Tooltip
               placement="topRight"
@@ -160,6 +211,21 @@ const Home: NextPage = () => {
           }
         >
           <DemoLine />
+        </Card>
+      </Col>
+      <Col xs={24} sm={12} md={12} lg={12} xl={12} xxl={12}>
+        <Card
+          title="Route Share"
+          extra={
+            <Tooltip
+              placement="topRight"
+              title="Percentage of each route occupation this month"
+            >
+              <InfoCircleOutlined />
+            </Tooltip>
+          }
+        >
+          <DemoPie />
         </Card>
       </Col>
     </Row>
