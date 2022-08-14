@@ -1,9 +1,9 @@
 import { Dispatch } from 'react'
 import Image from 'next/image'
-import { Drawer } from 'antd'
+import { Drawer, Row, Col, Typography } from 'antd'
 import TheMenu from 'components/_App/TheMenu'
-// This component uses the same stylesheet as `TheDrawer` component
-import s from 'styles/components/_App/TheSider.module.css'
+
+const { Title } = Typography
 
 export default function TheDrawer({
   isDrawerVsbl,
@@ -21,8 +21,17 @@ export default function TheDrawer({
       width={200}
       bodyStyle={{ backgroundColor: '#001529', padding: 0 }}
     >
-      <div className={s.logo}>
-        <Image src="/logo.svg" alt="App Logo" width={44} height={44} />
+      <div style={{ margin: '33px 15px 15px' }}>
+        <Row gutter={10} align="middle">
+          <Col>
+            <Image src="/logo.svg" alt="App Logo" width={44} height={44} />
+          </Col>
+          <Col>
+            <Title level={4} style={{ color: 'white' }}>
+              App Name
+            </Title>
+          </Col>
+        </Row>
       </div>
 
       <TheMenu />
