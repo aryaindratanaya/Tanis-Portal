@@ -19,7 +19,7 @@ export default function BookingDetails({
 
   useEffect(() => {
     getTicketsByBookingId(sltBookingId).then((res) => setTickets(res.tickets))
-  }, [])
+  }, [sltBookingId])
 
   const onClickDelete = (id: string) => {
     setLoading(true)
