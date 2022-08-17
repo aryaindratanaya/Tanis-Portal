@@ -11,6 +11,7 @@ import {
   Button,
   InputNumber,
   Select,
+  Popconfirm,
 } from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 
@@ -342,9 +343,15 @@ const BookingPage: NextPage = () => {
                 {
                   key: 'delete',
                   render: (booking) => (
-                    <DeleteOutlined
-                      onClick={() => onClickDelete(booking?.id)}
-                    />
+                    <Popconfirm
+                      title="Are you sure?"
+                      onConfirm={() => onClickDelete(booking?.id)}
+                      okText="Yes"
+                      cancelText="No"
+                      placement="left"
+                    >
+                      <DeleteOutlined />
+                    </Popconfirm>
                   ),
                   width: 1,
                 },
