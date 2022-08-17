@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { NextPage } from 'next'
 import {
   Card,
@@ -11,7 +11,7 @@ import {
   Radio,
   Popconfirm,
 } from 'antd'
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteOutlined, SyncOutlined } from '@ant-design/icons'
 import {
   createPartner,
   getPartners,
@@ -23,46 +23,62 @@ import { partnerType } from 'constants/partner'
 import s from 'styles/pages/dashboard/partner.module.css'
 
 const PartnerPage: NextPage = () => {
-  const [isLoading, setLoading] = useState(false)
-  const [partners, setPartners] = useState<Partner[] | []>([])
+  const [isFormLoading, setFormLoading] = useState(false)
+  const [isTableLoading, setTableLoading] = useState(false)
+  const [tableData, setTableData] = useState<Partner[]>([])
+  const [form] = Form.useForm()
+  const effectRan = useRef(false)
+
+  const onFinish = async (partner: Partner) => {
+    setFormLoading(true)
+    const { error } = await createPartner(partner)
+    setFormLoading(false)
+    error
+      ? toast({ type: 'error', message: 'Oops, error when adding partner!' })
+      : toast({ message: 'Partner added!' })
+    if (error) return
+    form.resetFields()
+    refreshTable()
+  }
+
+  const handleDelete = (id: string) => {
+    setTableLoading(true)
+    deletePartner(id).then(({ error }) => {
+      error
+        ? toast({ message: 'Oops, error when deleting partner!' })
+        : toast({ message: 'Partner deleted!' })
+      refreshTable()
+    })
+  }
+
+  const refreshTable = async () => {
+    setTableLoading(true)
+    const { partners, error } = await getPartners()
+    setTableData(partners)
+    error &&
+      toast({ type: 'error', message: 'Oops, error when loading partners!' })
+    setTableLoading(false)
+  }
 
   useEffect(() => {
-    getPartners().then((res) => setPartners(res.partners))
+    if (effectRan.current === false) {
+      refreshTable()
+      return () => {
+        effectRan.current = true
+      }
+    }
   }, [])
-
-  const onFinish = (partner: Partner) => {
-    setLoading(true)
-    createPartner(partner)
-      .then(() => toast({ message: 'A partner has been created!' }))
-      .catch((e) => {
-        const error = new Error(e)
-        toast({ type: 'error', message: error.message })
-      })
-      .finally(() => {
-        getPartners().then((res) => setPartners(res.partners))
-        setLoading(false)
-      })
-  }
-
-  const onClickDelete = (id: string) => {
-    setLoading(true)
-    deletePartner(id)
-      .then(() => toast({ message: 'Partner has been deleted!' }))
-      .catch((e) => {
-        const error = new Error(e)
-        toast({ type: 'error', message: error.message })
-      })
-      .finally(() => {
-        getPartners().then((res) => setPartners(res.partners))
-        setLoading(false)
-      })
-  }
 
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={24} md={12} lg={9} xl={8}>
         <Card>
-          <Form layout="vertical" onFinish={onFinish}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            disabled={isFormLoading}
+          >
             <Form.Item label="Name" name="name">
               <Input placeholder="Please input partner's name" />
             </Form.Item>
@@ -90,7 +106,7 @@ const PartnerPage: NextPage = () => {
               <Button
                 type="primary"
                 htmlType="submit"
-                loading={isLoading}
+                loading={isFormLoading}
                 block
               >
                 Submit
@@ -100,18 +116,27 @@ const PartnerPage: NextPage = () => {
         </Card>
       </Col>
       <Col xs={24} sm={24} md={12} lg={15} xl={16}>
-        <Card>
+        <Card
+          title="Partners"
+          extra={
+            <Button
+              icon={<SyncOutlined />}
+              onClick={refreshTable}
+              loading={isTableLoading}
+            />
+          }
+        >
           <Table
-            loading={isLoading}
+            loading={isTableLoading}
             columns={[
               { title: 'Name', dataIndex: 'name', key: 'name' },
               { title: 'Role', dataIndex: 'role', key: 'role' },
               {
                 key: 'delete',
-                render: (partner) => (
+                render: (partner: { id: string }) => (
                   <Popconfirm
                     title="Are you sure?"
-                    onConfirm={() => onClickDelete(partner.id)}
+                    onConfirm={() => handleDelete(partner?.id)}
                     okText="Yes"
                     cancelText="No"
                     placement="left"
@@ -122,9 +147,9 @@ const PartnerPage: NextPage = () => {
                 width: 1,
               },
             ]}
-            dataSource={partners.map((partner) => ({
-              key: partner?.id,
-              ...partner,
+            dataSource={tableData.map((item) => ({
+              key: item?.id,
+              ...item,
             }))}
           />
         </Card>

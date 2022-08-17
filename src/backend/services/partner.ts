@@ -11,19 +11,19 @@ import { Partner } from 'backend/models/partner'
 
 export const createPartner = async (
   partner: Partner
-): Promise<Error | null> => {
+): Promise<{ error: unknown }> => {
   try {
     const partnerRef = collection(db, 'partners')
-    addDoc(partnerRef, partner)
-    return null
+    await addDoc(partnerRef, partner)
+    return { error: null }
   } catch (error: any) {
-    return new Error(error.message)
+    return { error }
   }
 }
 
 export const getPartners = async (): Promise<{
   partners: Partner[]
-  error: Error | null
+  error: unknown
 }> => {
   try {
     const partnerRef = collection(db, 'partners')
@@ -40,16 +40,18 @@ export const getPartners = async (): Promise<{
       res.push(partner)
     })
     return { partners: res, error: null }
-  } catch (error: any) {
-    return { partners: [], error: new Error(error.message) }
+  } catch (error) {
+    return { partners: [], error }
   }
 }
 
-export const deletePartner = async (docID: string): Promise<Error | null> => {
+export const deletePartner = async (
+  docID: string
+): Promise<{ error: unknown }> => {
   try {
-    deleteDoc(doc(db, 'partners', docID))
-    return null
-  } catch (error: any) {
-    return new Error(error.message)
+    await deleteDoc(doc(db, 'partners', docID))
+    return { error: null }
+  } catch (error) {
+    return { error }
   }
 }
