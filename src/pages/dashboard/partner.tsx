@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
-import { Card, Form, Input, Button, Row, Col, Table, Radio } from 'antd'
+import {
+  Card,
+  Form,
+  Input,
+  Button,
+  Row,
+  Col,
+  Table,
+  Radio,
+  Popconfirm,
+} from 'antd'
 import { DeleteOutlined } from '@ant-design/icons'
 import {
   createPartner,
@@ -99,7 +109,15 @@ const PartnerPage: NextPage = () => {
               {
                 key: 'delete',
                 render: (partner) => (
-                  <DeleteOutlined onClick={() => onClickDelete(partner.id)} />
+                  <Popconfirm
+                    title="Are you sure?"
+                    onConfirm={() => onClickDelete(partner.id)}
+                    okText="Yes"
+                    cancelText="No"
+                    placement="left"
+                  >
+                    <DeleteOutlined />
+                  </Popconfirm>
                 ),
                 width: 1,
               },
